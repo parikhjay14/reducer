@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {TextInput} from 'react-native';
 
-class TextField extends Components {
+class TextField extends Component {
     render() {
-        const {placeholder}=this.props;
+        const {placeholder, onChangeText, style, value}=this.props;
         const {textFieldStyle}=styles;
-        return <TextInput placeholder={placeholder} style={textFieldStyle} />;
+        return ( 
+        <TextInput placeholder={placeholder} style={[textFieldStyle, style]} placeholderTextColor="red" onChangeText={onChangeText} value={value}
+        />);
     }
 }
 
@@ -16,7 +18,7 @@ const styles = {
         borderBottomWidth: 2,
         alignSelf: 'center',
         marginVertical: 10,
-        borderColor: 'brown',
+        borderColor: 'blue',
         color: 'black',
     },
 };

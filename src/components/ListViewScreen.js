@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator} from 'react-native';
-import {ListCard} from './common';
+import {ListCard, TextField} from './common';
+import {connect} from 'react-redux';
+import {imageSearchBoxValueChanged} from '../actions';
 import axios from 'axios';
 // import { thisExpression } from '@babel/types';
 
@@ -43,42 +45,44 @@ class ListViewScreen extends Component{
     }
     render(){
         const {ViewStyle, HeaderViewStyle} = styles;
-        const DATA = [
-            {
-                image: require('./meme1.jpg'),
-                owner: 'Meme1',
-            },
-            {
-                image: require('./meme2.jpg'),
-                owner: 'Meme2',
-            },
-            {
-                image: require('./meme3.jpg'),
-                owner: 'Meme3',
-            },
-            {
-                image: require('./meme4.jpg'),
-                owner: 'Meme4',
-            },
+        // const DATA = [
+        //     {
+        //         image: require('./meme1.jpg'),
+        //         owner: 'Meme1',
+        //     },
+        //     {
+        //         image: require('./meme2.jpg'),
+        //         owner: 'Meme2',
+        //     },
+        //     {
+        //         image: require('./meme3.jpg'),
+        //         owner: 'Meme3',
+        //     },
+        //     {
+        //         image: require('./meme4.jpg'),
+        //         owner: 'Meme4',
+        //     },
            
-        ];
+        // ];
         // this.getImagesAPICall();
         return (
             <View style ={ViewStyle}>
                 <View style = {HeaderViewStyle}>
                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Image Gallery</Text>
                 </View>
-                {/* <ScrollView>
-                  <ListCard image={require('./meme1.jpg')} ownerName="Jay Parikh"/>
-                  <ListCard image={require('./meme1.jpg')} ownerName="Jay Parikh"/>
-                  <ListCard image={require('./meme1.jpg')} ownerName="Jay Parikh"/>
-                  <ListCard image={require('./meme1.jpg')} ownerName="Jay Parikh"/>
-                </ScrollView> */}
+                <TextField
+                 placeholder="Search"
+                 onChangeText={value => {
+                    //  
+                    this.props.imageSearchBoxValueChanged(value);
+                 }}
+                 value={this.props.image_search_value} 
+                />
                 <FlatList
                  //  data={DATA}
                  data={this.state.imageList}
                  renderItem={item => {
-                     console.log(item, item.item, item.item.owner);
+                    //  console.log(item, item.item, item.item.owner);
                      return(
                          <ListCard image={item.item.download_url} ownerName={item.item.author}/>
                      );
@@ -118,4 +122,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListViewScreen;
+const mapStateToProps = state => {
+    return{
+        image_search_value: state.imageListing.image_search,
+    };
+};
+
+export default connect(mapStateToProps, {imageSearchBoxValueChanged})(ListViewScreen);
